@@ -1,18 +1,16 @@
-import com.sun.xml.internal.ws.api.model.wsdl.WSDLOutput;
-
 public class HashMap <K, V> {
     private MapEntry<K, V>[] arrayOfEntries;
     private int size;
 
-    @SuppressWarnings("unchecked")
+   @SuppressWarnings("unchecked")
     public HashMap(int capacity) {
-        arrayOfEntries = (MapEntry<K, V>[]) new MapEntry[capacity];
+        arrayOfEntries = new MapEntry[capacity];
         size = 0;
     }
 
     @SuppressWarnings("unchecked")
     public HashMap() {
-        arrayOfEntries = (MapEntry<K, V>[]) new MapEntry[8];
+        arrayOfEntries = new MapEntry[8];
         size = 0;
     }
 
@@ -23,7 +21,9 @@ public class HashMap <K, V> {
     public void put(K key, V value) {
         MapEntry<K, V> newEntry = new MapEntry<>(key, value);
         int index = index(key);
-        if (isFull()) this.expand();
+        if (loadFactor()) {
+            this.expand();
+        }
         while(this.arrayOfEntries[index] != null) {
             index++;
             index %= this.arrayOfEntries.length;
@@ -80,12 +80,13 @@ public class HashMap <K, V> {
         size = 0;
         this.arrayOfEntries = (MapEntry<K, V>[]) new MapEntry[oldEntriesArray.length * 2];
         for (MapEntry<K, V> oldEntry : oldEntriesArray) {
-            if (oldEntry != null) this.put(oldEntry.getKey(), oldEntry.getValue());
+            if (oldEntry != null) {
+                this.put(oldEntry.getKey(), oldEntry.getValue());
+            }
         }
     }
 
     /**
-     *
      * @return a String with all contents of the map + it's size
      */
     @Override
@@ -100,12 +101,24 @@ public class HashMap <K, V> {
         return output.toString();
     }
 
+    /**
+     * @return whether the HashMap is completely full
+     */
     public boolean isFull() {
         return this.size == this.arrayOfEntries.length;
     }
 
+    /**
+     * @return whether the HashMap is more than 75% full
+     */
+    private boolean loadFactor() {
+        return this.size >= (this.arrayOfEntries.length * 0.75);
+    }
+
+    /**
+     * @return the current size of HashMap
+     */
     public int size() {
         return this.size;
     }
-
 }

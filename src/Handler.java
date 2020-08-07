@@ -2,12 +2,13 @@ public class Handler {
 
     public static void main(String...args) {
         // Let's create a HashMap:
-        HashMap<Integer, Long> hashMap = new HashMap<>(5);
+        HashMap<Integer, Long> hashMap = new HashMap<>(6);
         // Then, populate it:
         hashMap.put(80, 22L);
         hashMap.put(16, 11L);
         hashMap.put(59, 43L);
         hashMap.put(73, 77L);
+        System.out.println(hashMap.toString());
         hashMap.put(12, 122L);
         // Let's see what are the size and the contents:
         System.out.println(hashMap.toString());
@@ -20,5 +21,4 @@ public class Handler {
         System.out.println("Found: " + hashMap.get(11));
         // Here it is.
     }
-
 }
